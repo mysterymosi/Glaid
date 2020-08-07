@@ -5,10 +5,9 @@ const customer = {
   mutations: {},
   actions: {
     signup(context, payload) {
-      const proxyurl = "https://cors-anywhere.herokuapp.com/";
        return axios
         .post(
-          proxyurl + "https://glaid.herokuapp.com/customer/register",
+          process.env.VUE_APP_PROXY_URL + "https://glaid.herokuapp.com/customer/register",
           payload
         )
         .then((res) => {
@@ -20,6 +19,14 @@ const customer = {
           console.log("error: ", error);
         });
     },
+
+    submit_otp(context, payload) {
+      return axios.post(process.env.VUE_APP_PROXY_URL + "https://glaid.herokuapp.com//validate_otp", payload).then((res) => {
+        console.log("otp res: ", res);
+      }).catch((err) => {
+        console.log("error: ", err);
+      });
+    }
   },
 };
 
