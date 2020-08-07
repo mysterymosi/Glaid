@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <div class="container-scroller">
+    <div v-if="!isAwaitingOtp" class="container-scroller">
     <div class="container-fluid page-body-wrapper full-page-wrapper">
       <div class="main-panel">
         <div class="content-wrapper d-flex align-items-center auth px-0">
@@ -54,19 +54,31 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
+  <OtpForm @sendOtp="submitOtp($event)" v-if="isAwaitingOtp" />
   </div>
 </template>
 
 <script>
 import { required, minLength} from "vuelidate/lib/validators";
 export default {
+  components: {
+    OtpForm: () => import("@/components/OtpForm.vue")
+  },
   data() {
     return {
       name: "",
       email: "",
       phoneNumber: "",
       password: "",
-      reEnterPassword: ""
+      reEnterPassword: "",
+      isAwaitingOtp: false,
+      otp_details: {
+        name: "",
+        email: "",
+        tel: "",
+        password: "",
+        otp: ""
+      }
     };
   },
 
@@ -78,10 +90,32 @@ export default {
         tel: this.phoneNumber,
         password: this.password
       };
+      this.otp_details = {
+        name: this.name,
+        email: this.email,
+        tel: this.phoneNumber,
+        password: this.password
+      };
+
       console.log("user info: ", userInfo);
       this.$store.dispatch("customer/signup", userInfo).then(() => {
-        this.$router.replace({ path: "/"});
+        // this.$router.replace({ path: "/"});
+        this.isAwaitingOtp = true
       });
+    },
+
+    submitOtp(otp) {
+      let otp_info = {
+        fullName: this.otp_details.name,
+        email: this.otp_details.email,
+        tel: this.otp_details.tel,
+        password: this.otp_details.password,
+        otp: otp
+      };
+      console.log("otp: ", otp_info);
+      this.$store.dispatch("customer/signup", otp_info).then(() => {
+        console.log("redirecting...");
+      }); 
     }
   },
 
