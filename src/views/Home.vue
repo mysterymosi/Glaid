@@ -5,7 +5,7 @@
     <h1>
       GLAID
     </h1>
-    <button>Get Started</button>
+    <button><router-link to="/signup">Get Started</router-link></button>
   </div>
 </template>
 
