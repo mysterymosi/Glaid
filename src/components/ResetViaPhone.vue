@@ -9,49 +9,50 @@
                 <div class="brand-logo">
                   <img src="../assets/logo.svg" alt="logo" />
                 </div>
-                <h4>Hello! let's get started</h4>
-                <h6 class="font-weight-light">Sign in to continue.</h6>
+                <h4>Forgot Password</h4>
+                <h6 class="font-weight-light">Please enter the phone number associated with your account below.</h6>
                 <form class="pt-3">
                   <div class="form-group">
                     <input
-                      type="email"
-                      v-model="email"
+                      type="tel"
+                      v-model="otp"
                       class="form-control form-control-lg"
                       id="exampleInputEmail1"
-                      placeholder="Email Address"
+                      placeholder="Phone Number"
                     />
                   </div>
-                  <div class="form-group">
+                  <hr>
+                  <!-- <div class="form-group">
                     <input
                       type="password"
-                      v-model="password"
                       class="form-control form-control-lg"
                       id="exampleInputPassword1"
                       placeholder="Password"
                     />
-                  </div>
+                  </div> -->
                   <div class="mt-3">
-                    <button
-                      @click.prevent="login"
+                    <button @click.prevent="submitOtp"
                       class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
-                    >SIGN IN</button>
+                    >Send OTP</button>
                   </div>
-                  <div class="text-center align-items-center">
+                  <!-- <div class="my-2 d-flex justify-content-between align-items-center">
                     <div class="form-check">
                       <label class="form-check-label text-muted">
-                        <router-link to="/password_reset" class="auth-link text-black">Forgot password?</router-link>
+                        <input type="checkbox" class="form-check-input" />
+                        Keep me signed in
                       </label>
                     </div>
-                  </div>
+                    <a href="#" class="auth-link text-black">Forgot password?</a>
+                  </div> -->
                   <!-- <div class="mb-2">
                     <button type="button" class="btn btn-block btn-facebook auth-form-btn">
                       <i class="mdi mdi-facebook mr-2"></i>Connect using facebook
                     </button>
-                  </div>-->
-                  <div class="text-center mt-4 font-weight-light">
-                    Don't have an account?
-                    <a href="register.html" class="text-primary">Create</a>
-                  </div>
+                  </div> -->
+                  <!-- <div class="text-center mt-4 font-weight-light">
+                    Did not receive an OTP?
+                    <a @click.prevent="resendOtp" href="register.html" class="text-primary">Resend</a>
+                  </div> -->
                 </form>
               </div>
             </div>
@@ -66,31 +67,51 @@
 </template>
 
 <script>
+import { signup } from "../utils";
 export default {
+  props: {
+    name: {
+      type: String
+    },
+    email: {
+      type: String
+    },
+    tel: {
+      type: String
+    },
+    password: {
+      type: String
+    }
+  },
   data() {
     return {
-      email: "",
-      password: ""
+      otp: ""
     };
   },
 
   methods: {
-    login() {
-      this.$store
-        .dispatch("login", {
-          email: this.email,
-          password: this.password
-        })
-        .then(() => {
-          console.log("login works");
-        });
+    submitOtp() {
+      this.$emit("sendOtp", this.otp);
+    },
+
+    resendOtp() {
+      let userInfo = {
+        fullName: this.name,
+        email: this.email,
+        tel: this.tel,
+        password: this.password
+      }
+      console.log("info: ", userInfo);
+      signup(userInfo).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err)
+      });
     }
   }
 };
 </script>
 
-<style scoped>
-@import "../assets/auth/css/materialdesignicons.min.css";
-@import "../assets/auth/css/vendor.bundle.base.css";
-@import "../assets/auth/css/style.css";
+<style>
+
 </style>
