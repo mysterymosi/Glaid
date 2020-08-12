@@ -47,11 +47,11 @@
                     <button type="button" class="btn btn-block btn-facebook auth-form-btn">
                       <i class="mdi mdi-facebook mr-2"></i>Connect using facebook
                     </button>
-                  </div>
-                  <div class="text-center mt-4 font-weight-light">
-                    Don't have an account?
-                    <a href="register.html" class="text-primary">Create</a>
                   </div> -->
+                  <div class="text-center mt-4 font-weight-light">
+                    Did not receive an OTP?
+                    <a @click.prevent="resendOtp" href="register.html" class="text-primary">Resend</a>
+                  </div>
                 </form>
               </div>
             </div>
@@ -66,7 +66,22 @@
 </template>
 
 <script>
+import { signup } from "../utils";
 export default {
+  props: {
+    name: {
+      type: String
+    },
+    email: {
+      type: String
+    },
+    tel: {
+      type: String
+    },
+    password: {
+      type: String
+    }
+  },
   data() {
     return {
       otp: ""
@@ -76,6 +91,21 @@ export default {
   methods: {
     submitOtp() {
       this.$emit("sendOtp", this.otp);
+    },
+
+    resendOtp() {
+      let userInfo = {
+        fullName: this.name,
+        email: this.email,
+        tel: this.tel,
+        password: this.password
+      }
+      console.log("info: ", userInfo);
+      signup(userInfo).then((data) => {
+        console.log(data);
+      }).catch((err) => {
+        console.log(err)
+      });
     }
   }
 };

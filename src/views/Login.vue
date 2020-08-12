@@ -15,6 +15,7 @@
                   <div class="form-group">
                     <input
                       type="email"
+                      v-model="email"
                       class="form-control form-control-lg"
                       id="exampleInputEmail1"
                       placeholder="Email Address"
@@ -23,29 +24,30 @@
                   <div class="form-group">
                     <input
                       type="password"
+                      v-model="password"
                       class="form-control form-control-lg"
                       id="exampleInputPassword1"
                       placeholder="Password"
                     />
                   </div>
                   <div class="mt-3">
-                    <a
+                    <button
+                      @click.prevent="login"
                       class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
-                      href="../../index.html"
-                    >SIGN IN</a>
+                    >SIGN IN</button>
                   </div>
-                  <!-- <div class="text-center align-items-center">
+                  <div class="text-center align-items-center">
                     <div class="form-check">
                       <label class="form-check-label text-muted">
                         <a href="#" class="auth-link text-black">Forgot password?</a>
                       </label>
                     </div>
-                  </div> -->
+                  </div>
                   <!-- <div class="mb-2">
                     <button type="button" class="btn btn-block btn-facebook auth-form-btn">
                       <i class="mdi mdi-facebook mr-2"></i>Connect using facebook
                     </button>
-                  </div> -->
+                  </div>-->
                   <div class="text-center mt-4 font-weight-light">
                     Don't have an account?
                     <a href="register.html" class="text-primary">Create</a>
@@ -64,7 +66,27 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+
+  methods: {
+    login() {
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password
+        })
+        .then(() => {
+          console.log("login works");
+        });
+    }
+  }
+};
 </script>
 
 <style scoped>

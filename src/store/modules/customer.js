@@ -7,12 +7,15 @@ const customer = {
     signup(context, payload) {
        return axios
         .post(
-          process.env.VUE_APP_PROXY_URL + "https://glaid.herokuapp.com/customer/register",
+          "https://glaid.herokuapp.com/customer/register",
           payload
         )
         .then((res) => {
           if (res.data.status === 200) {
             console.log("signup: ", res);
+            return res.data;
+          } else {
+            return res.data;
           }
         })
         .catch((error) => {
@@ -21,7 +24,7 @@ const customer = {
     },
 
     submit_otp(context, payload) {
-      return axios.post(process.env.VUE_APP_PROXY_URL + "https://glaid.herokuapp.com//validate_otp", payload).then((res) => {
+      return axios.post("https://glaid.herokuapp.com//validate_otp", payload).then((res) => {
         console.log("otp res: ", res);
       }).catch((err) => {
         console.log("error: ", err);
